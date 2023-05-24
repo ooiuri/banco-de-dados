@@ -1,0 +1,134 @@
+	
+a)
+	SELECT MAX(a.Nota), MIN(a.Nota)
+	FROM Aula a, Disciplina d
+	WHERE a.NumDisp = d.NumDisp AND d.Nome = 'CALCULO NUMERICO' AND a.Semestre = '01/1998';
+
+	"8.00"	"3.50"
+
+b)
+	SELECT al.Nome, a.Nota
+	FROM Aula a, Disciplina d, Aluno al
+	WHERE al.NumAluno = a.NumAluno AND a.NumDisp = d.NumDisp AND d.Nome = 'ENGENHARIA DE SOFTWARE' AND a.Semestre = '01/1998' AND a.Nota = (SELECT MAX(a.Nota) FROM Aula a)
+
+	"EDVALDO CARLOS SILVA"	"10.00"
+
+c)
+	SELECT AVG(a.Nota)
+	FROM Aula a, Professor p
+	WHERE p.NumFunc = a.NumFunc AND p.Nome = 'MARCOS SALVADOR'
+
+	"7.1666666666666667"
+
+d)	
+	SELECT al.Nome, d.Nome, a.Nota
+	FROM Aula a, Disciplina d, Aluno al
+	WHERE al.NumAluno = a.NumAluno AND d.NumDisp = a.NumDisp
+	GROUP BY d.Nome, al.Nome, a.Nota
+	HAVING a.Nota > 5 AND a.Nota < 7
+	ORDER BY d.Nome ASC
+
+	
+	"MARCOS JOAO CASANOVA"	"CALCULO NUMERICO"		"6.50"
+
+	"JOAO BENEDITO SCAPIN"	"ENGENHARIA DE SOFTWARE"	"5.50"
+
+	"EDVALDO CARLOS SILVA"	"ESTRUTURA DE DADOS"		"6.00"
+
+e)
+	SELECT COUNT(al.Nome)
+	FROM Aula a, Professor p, Aluno al
+	WHERE al.NumAluno = a.NumAluno AND p.NumFunc = a.NumFunc AND a.Semestre = '01/1998' AND p.Nome = 'ABGAIR SIMON FERREIRA'
+	
+	"4"
+
+f)
+	SELECT AVG(a.Nota), COUNT(d.Nome)
+	FROM Aula a, Aluno al, Disciplina d
+	WHERE al.NumAluno = a.NumAluno AND d.NumDisp = a.NumDisp AND al.Nome = 'EDVALDO CARLOS SILVA'
+
+	"7.9" "5"
+
+g)
+	SELECT AVG(a.Nota), d.Nome
+	FROM Aula a, Disciplina d
+	WHERE d.NumDisp = a.NumDisp AND a.Semestre = '01/1998'
+	GROUP BY d.Nome
+	ORDER BY d.Nome ASC
+
+	"7.7500000000000000"	"BANCO DE DADOS		       "
+
+	"6.2500000000000000"	"CALCULO NUMERICO              "
+
+	"4.5000000000000000"	"DIREITO PENAL                 "
+
+	"9.0000000000000000"	"DIREITO TRIBUTARIO            "
+
+	"8.3750000000000000"	"ENGENHARIA DE SOFTWARE        "
+
+	"7.0000000000000000"	"ESTRUTURA DE DADOS            "
+
+	"7.5000000000000000"	"PSICOLOGIA INFANTIL           "
+
+h)
+	SELECT AVG(a.Nota), p.Nome
+	FROM Aula a, Professor p
+	WHERE p.NumFunc = a.NumFunc AND a.Semestre = '01/1998'
+	GROUP BY p.Nome
+	ORDER BY p.Nome ASC
+
+	"7.3750000000000000"	"ABGAIR SIMON FERREIRA                                                 "
+	
+"8.3750000000000000"	"CINTIA FALCAO                                                         "
+
+	"7.5000000000000000"	"GUSTAVO GOLVEIA NETTO                                                 "
+
+	"6.2500000000000000"	"MARCOS SALVADOR                                                       "
+	
+"6.7500000000000000"	"RAMON TRAVANTI                                                        "
+
+i)
+	SELECT AVG(a.Nota), d.Nome
+	FROM Aula a, Disciplina d, Curso c, DisciplinaCurso dc
+	WHERE c.NumCurso = dc.NumCurso AND dc.NumDisp = d.NumDisp AND d.NumDisp = a.NumDisp AND a.Semestre = '01/1998' AND c.Nome = 'CIENCIA DA COMPUTACAO'
+	GROUP BY d.Nome
+	ORDER BY d.Nome ASC
+
+	"7.7500000000000000"	"BANCO DE DADOS                "
+	
+"6.2500000000000000"	"CALCULO NUMERICO              "
+	
+"8.3750000000000000"	"ENGENHARIA DE SOFTWARE        "
+	
+"7.0000000000000000"	"ESTRUTURA DE DADOS            "
+
+j)
+	SELECT SUM(d.QuantCreditos) AS Soma_Creditos
+	FROM Aula a, Disciplina d, Aluno al
+	WHERE a.NumAluno = al.NumAluno AND d.NumDisp = a.NumDisp AND al.Nome = 'EDVALDO CARLOS SILVA' AND a.Nota >= 7
+	
+	"117"
+
+k)
+	SELECT  al.Nome, SUM(d.QuantCreditos) AS Soma_Creditos
+	FROM Aula a, Disciplina d, Aluno al
+	WHERE a.NumAluno = al.NumAluno AND d.NumDisp = a.NumDisp AND a.Nota >= 7
+	GROUP BY al.Nome
+	HAVING SUM(d.QuantCreditos) >= 70
+
+	"EDVALDO CARLOS SILVA                                                  "	"117"
+
+	"MARCOS JOAO CASANOVA                                                  "	"117"
+
+l)
+	SELECT  al.Nome, d.Nome, p.Nome
+	FROM Aula a, Disciplina d, Aluno al, Professor p, Curso c, DisciplinaCurso dc
+	WHERE c.NumCurso = dc.NumCurso AND dc.NumDisp = d.NumDisp AND p.NumFunc = a.NumFunc AND a.NumAluno = al.NumAluno AND d.NumDisp = a.NumDisp AND a.Nota > 8 AND a.Semestre = '01/1998' AND c.Nome = 'CIENCIA DA COMPUTACAO'
+	
+	"EDVALDO CARLOS SILVA"	"BANCO DE DADOS                "	"ABGAIR SIMON FERREIRA                                                 "
+
+	"EDVALDO CARLOS SILVA"	"ENGENHARIA DE SOFTWARE        "	"CINTIA FALCAO                                                         "
+
+	"MARCOS JOAO CASANOVA"	"ENGENHARIA DE SOFTWARE        "	"CINTIA FALCAO                                                         "
+
+	"AILTON CASTRO"		"ENGENHARIA DE SOFTWARE        "	"CINTIA FALCAO                                                         "
